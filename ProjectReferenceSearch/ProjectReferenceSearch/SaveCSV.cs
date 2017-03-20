@@ -9,12 +9,12 @@ namespace ProjectReferenceSearch
         public static void SaveToCsv(IEnumerable<ProjectFile> projects)
         {
             var csvBuilder = new StringBuilder();
-            csvBuilder.AppendLine("\"Project\",\"Assembly\",\"Dll\",\"Nuget\"");
+            csvBuilder.AppendLine("\"Project\",\"Assembly\",\"Dll\",\"Version\",\"Nuget\"");
             foreach (var project in projects)
             {
                 foreach (var reference in project.GetNonGacReferences())
                 {
-                    csvBuilder.AppendLine($"\"{project.FileName}\",\"{reference.AssemblyName}\",\"{reference.File}\",\"{reference.IsNuget}\"");
+                    csvBuilder.AppendLine($"\"{project.FileName}\",\"{reference.AssemblyName}\",\"{reference.File}\",\"{reference.Version}\",\"{reference.IsNuget}\"");
                 }
             }
 

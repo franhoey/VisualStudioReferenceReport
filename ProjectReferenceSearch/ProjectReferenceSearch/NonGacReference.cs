@@ -7,12 +7,14 @@ namespace ProjectReferenceSearch
     public class NonGacReference
     {
         public static readonly Regex AssemblyNameRegex = new Regex("^[^,]*", RegexOptions.Compiled);
+        public static readonly Regex VersionRegex = new Regex(@"(?<=Version\=)[^,]*", RegexOptions.Compiled);
         public static readonly Regex FileRegex = new Regex(@"(?<=\\)[^\\]*$", RegexOptions.Compiled);
         public static readonly Regex NugetRegex = new Regex(@"\\NuGet\\", RegexOptions.Compiled);
 
         public string AssemblyName { get; }
         public string File { get; }
         public bool IsNuget { get; }
+        public string Version { get; set; }
 
         public NonGacReference(XPathNavigator node, string nameSpaceUri)
         {
@@ -22,6 +24,7 @@ namespace ProjectReferenceSearch
             AssemblyName = GetValue(node.SelectSingleNode("@Include")?.Value, AssemblyNameRegex);
             File = GetValue(node.SelectSingleNode("n:HintPath", namespaceManager)?.Value, FileRegex);
             IsNuget = Exists(node.SelectSingleNode("n:HintPath", namespaceManager)?.Value, NugetRegex);
+            Version = GetValue(node.SelectSingleNode("@Include")?.Value, VersionRegex);
         }
 
         private string GetValue(string nodeValue, Regex parser)
